@@ -11,7 +11,6 @@
 10164_3.c
 10164_3.cpp
 1037.c
-1038.cpp
 1068.cpp
 1068_2.cpp
 10815.cpp
@@ -429,3 +428,9 @@ STL/
 플로이드/floyd.c
 별찍기/
 LIS/
+dijkstra/5719(fail).cpp
+1038_2.cpp
+network flow/network flow.cpp
+그래프 이론/5719(fail).cpp
+오일러파이함수/
+완전탐색/
