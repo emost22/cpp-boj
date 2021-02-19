@@ -56,22 +56,33 @@ int bfs() {
 	return cnt;
 }
 
-void wall() {
+void wall(int x, int y) {
 	if (w.size() == 3) {
 		ans = Max(ans, bfs());
 		map[w.top().first][w.top().second] = 0;
 		return;
 	}
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < M; j++) {
+
+	int i = x;
+	int j = y;
+	for (; i < N; i++) {
+		for (; j < M; j++) {
 			if (!map[i][j]) {
 				map[i][j] = 3;
 				w.push(make_pair(i, j));
-				wall();
+				
+				int nx = i;
+				int ny = j + 1;
+				if (ny == M) {
+					nx++;
+					ny = 0;
+				}
+				wall(nx, ny);
 				w.pop();
 				map[i][j] = 0;
 			}
 		}
+		j = 0;
 	}
 }
 
@@ -90,7 +101,7 @@ int main() {
 		}
 	}
 
-	wall();
+	wall(0, 0);
 	cout << ans << '\n';
 
 	return 0;
