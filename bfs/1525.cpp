@@ -1,90 +1,97 @@
 #include <iostream>
-#include <string>
-#include <set>
-#include <queue>
 #include <vector>
-#define answer "123456780"
+#include <string>
+#include <queue>
+#include <set>
 using namespace std;
 
-vector<int> graph[9];
-queue<pair<int, pair<string, int> > > q;
-set<string> visit;
-string N;
+typedef struct list {
+	string now;
+	int idx;
+	int cnt;
+}list;
+
+queue<list> q;
+set<string> s;
+vector<int> v[9];
+string ans = "123456780", str = "";
 
 void init() {
-	graph[0].push_back(1);
-	graph[0].push_back(3);
+	v[0].push_back(1);
+	v[0].push_back(3);
 
-	graph[1].push_back(0);
-	graph[1].push_back(2);
-	graph[1].push_back(4);
+	v[1].push_back(0);
+	v[1].push_back(2);
+	v[1].push_back(4);
 
-	graph[2].push_back(1);
-	graph[2].push_back(5);
+	v[2].push_back(1);
+	v[2].push_back(5);
 
-	graph[3].push_back(0);
-	graph[3].push_back(4);
-	graph[3].push_back(6);
+	v[3].push_back(0);
+	v[3].push_back(4);
+	v[3].push_back(6);
 
-	graph[4].push_back(1);
-	graph[4].push_back(3);
-	graph[4].push_back(5);
-	graph[4].push_back(7);
+	v[4].push_back(1);
+	v[4].push_back(3);
+	v[4].push_back(5);
+	v[4].push_back(7);
 
-	graph[5].push_back(2);
-	graph[5].push_back(4);
-	graph[5].push_back(8);
+	v[5].push_back(2);
+	v[5].push_back(4);
+	v[5].push_back(8);
 
-	graph[6].push_back(3);
-	graph[6].push_back(7);
+	v[6].push_back(3);
+	v[6].push_back(7);
 
-	graph[7].push_back(4);
-	graph[7].push_back(6);
-	graph[7].push_back(8);
+	v[7].push_back(4);
+	v[7].push_back(6);
+	v[7].push_back(8);
 
-	graph[8].push_back(5);
-	graph[8].push_back(7);
+	v[8].push_back(5);
+	v[8].push_back(7);
 }
 
 void bfs() {
 	while (!q.empty()) {
-		string now = q.front().second.first;
-		int idx = q.front().second.second;
-		int cnt = q.front().first;
+		string now = q.front().now;
+		int idx = q.front().idx;
+		int cnt = q.front().cnt;
 		q.pop();
 
-		if (now == answer) {
+		if (!now.compare(ans)) {
 			cout << cnt << '\n';
 			return;
 		}
 
-		for (int i = 0; i < graph[idx].size(); i++) {
-			int next = graph[idx][i];
+		for (int i = 0; i < v[idx].size(); i++) {
+			int next = v[idx][i];
+			string tmp = now;
+			swap(tmp[idx], tmp[next]);
 
-			string str = now;
-			swap(str[idx], str[next]);
-			if (visit.find(str) != visit.end()) continue;
+			if (s.find(tmp) != s.end()) continue;
 
-			q.push({ cnt + 1, {str, next} });
-			visit.insert(str);
+			q.push({ tmp, next, cnt + 1 });
+			s.insert(tmp);
 		}
 	}
 
 	cout << "-1\n";
-	return;
 }
 
 void input() {
-	char ch;
-	int zero = 0;
+	int k = 0;
+	string tmp = "";
 	for (int i = 0; i < 9; i++) {
-		cin >> ch;
-		N += ch;
-		if (ch == '0') zero = i;
+		cin >> tmp;
+		str += tmp;
+
+		if (tmp[0] == '0') {
+			k = i;
+		}
 	}
 
-	visit.insert(N);
-	q.push({ 0, {N, zero} });
+	q.push({ str, k, 0 });
+	s.insert(str);
 }
 
 int main() {
