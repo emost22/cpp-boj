@@ -2,33 +2,49 @@
 #include <vector>
 using namespace std;
 
-vector<pair<int, int> > list;
+pair<int, int> list[201];
 int N, K, ans;
 
 void func() {
+	int l = 1;
+	int r = N;
 	for (int t = 1; ; t++) {
-		list.insert(list.begin(), list[2 * N - 1]);
-		list.pop_back();
+		l--;
+		r--;
+		if (!l) l = 2 * N;
+		if (!r) r = 2 * N;
 
-		for (int i = N - 1; i >= 0; i--) {
-			if (i == N - 1) {
+		for (int i = r; ; i--) {
+			if (!i) i = 2 * N;
+			if (i == r) {
 				list[i].second = 0;
 				continue;
 			}
-			if (!list[i].second) continue;
-			if (!list[i + 1].first || list[i + 1].second) continue;
+			int next = i + 1;
+			if (next == 2 * N + 1) next = 1;
+			
+			if (!list[i].second) {
+				if (i == l) break;
+				continue;
+			}
+			if (!list[next].first || list[next].second) {
+				if (i == l) break;
+				continue;
+			}
 
-			if (i + 1 != N - 1) list[i + 1].second = 1;
+			if (next != r) list[next].second = 1;
 			list[i].second = 0;
-			list[i + 1].first--;
+			list[next].first--;
 
-			if (!list[i + 1].first) ans++;
+			if (!list[next].first) ans++;
+			
+			if (i == l) break;
 		}
 
-		if (list[0].first) {
-			list[0].second = 1;
-			list[0].first--;
-			if (!list[0].first) ans++;
+		if (list[l].first) {
+			list[l].second = 1;
+			list[l].first--;
+			if (!list[l].first) ans++;
 		}
 
 		if (ans >= K) {
@@ -42,8 +58,7 @@ void input() {
 	int x;
 	cin >> N >> K;
 	for (int i = 1; i <= 2 * N; i++) {
-		cin >> x;
-		list.push_back({ x, 0 });
+		cin >> list[i].first;
 	}
 }
 
