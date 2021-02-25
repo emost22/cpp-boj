@@ -5,9 +5,9 @@ using namespace std;
 int N;
 
 void func() {
-	int ans = N;
-	for (int i = 2; i <= sqrt(N); i++) {
-		for (int j = i; i*j <= N; j++) {
+	int ans = 0;
+	for (int i = 1; i <= sqrt(N); i++) {
+		for (int j = i; i * j <= N; j++) {
 			ans++;
 		}
 	}
