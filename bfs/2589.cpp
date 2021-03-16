@@ -1,60 +1,72 @@
 #include <iostream>
 #include <queue>
 #include <cstring>
+#include <algorithm>
 using namespace std;
 
-queue<pair<pair<int, int>, int> > q;
-char map[50][50];
-bool visit[50][50];
-int x_direct[] = { 0,1,0,-1 }, y_direct[] = { 1,0,-1,0 };
+typedef struct Point {
+	int x;
+	int y;
+	int cnt;
+}Point;
+
+char list[60][60];
+bool visit[60][60];
+int direct[4][2] = { {0,1},{1,0},{0,-1},{-1,0} };
 int N, M, ans;
 
-int Max(int x, int y) {
-	return x > y ? x : y;
-}
+void bfs(int sx, int sy) {
+	queue<Point> q;
+	q.push({ sx,sy,0 });
+	visit[sx][sy] = true;
+	while (!q.empty()) {
+		int x = q.front().x;
+		int y = q.front().y;
+		int cnt = q.front().cnt;
+		q.pop();
 
-void bfs(int x, int y, int cnt) {
-	ans = Max(ans, cnt);
-	for (int i = 0; i < 4; i++) {
-		int xx = x + x_direct[i];
-		int yy = y + y_direct[i];
+		ans = max(ans, cnt);
+		for (int i = 0; i < 4; i++) {
+			int nx = x + direct[i][0];
+			int ny = y + direct[i][1];
 
-		if (xx < 0 || yy < 0 || xx >= N || yy >= M) continue;
-		if (visit[xx][yy] || map[xx][yy] == 'W') continue;
+			if (nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
+			if (visit[nx][ny] || list[nx][ny] == 'W') continue;
 
-		q.push(make_pair(make_pair(xx, yy), cnt + 1));
-		visit[xx][yy] = true;
+			q.push({ nx,ny,cnt + 1 });
+			visit[nx][ny] = true;
+		}
 	}
 }
 
-int main() {
-	cin.tie(NULL);
-	ios::sync_with_stdio(false);
-
-	cin >> N >> M;
-	for (int i = 0; i < N; i++) {
-		cin >> map[i];
-	}
-
+void func() {
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
-			if (map[i][j] == 'L') {
-				q.push(make_pair(make_pair(i, j), 0));
-				visit[i][j] = true;
-				while (!q.empty()) {
-					int x = q.front().first.first;
-					int y = q.front().first.second;
-					int cnt = q.front().second;
-					q.pop();
+			if (list[i][j] == 'W') continue;
 
-					bfs(x, y, cnt);
-				}
-				memset(visit, false, sizeof(visit));
-			}
+			bfs(i, j);
+			memset(visit, false, sizeof(visit));
 		}
 	}
 
 	cout << ans << '\n';
+}
+
+void input() {
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cin >> list[i][j];
+		}
+	}
+}
+
+int main() {
+	cin.tie(NULL); cout.tie(NULL);
+	ios::sync_with_stdio(false);
+
+	input();
+	func();
 
 	return 0;
 }
