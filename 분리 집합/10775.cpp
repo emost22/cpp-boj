@@ -1,36 +1,36 @@
 #include <iostream>
 using namespace std;
 
-int G, P, ans;
-int list[100001], parent[100001];
-
-void init() {
-	for (int i = 1; i <= G; i++) {
-		parent[i] = i;
-	}
-}
+int parent[100001], list[100001];
+int N, M, ans;
 
 int find(int v) {
-	if (v == parent[v]) return v;
+	if (parent[v] == v) return v;
 	return parent[v] = find(parent[v]);
 }
 
 void func() {
-	for (int i = 1; i <= P; i++) {
+	for (int i = 0; i < M; i++) {
 		int x = list[i];
-		int v = find(x);
+		int p = find(x);
 
-		if (!v) break;
-		parent[v] = v - 1;
+		if (!p) break;
+		parent[p] = p - 1;
 		ans++;
 	}
 
 	cout << ans << '\n';
 }
 
+void init() {
+	for (int i = 1; i <= N; i++) {
+		parent[i] = i;
+	}
+}
+
 void input() {
-	cin >> G >> P;
-	for (int i = 1; i <= P; i++) {
+	cin >> N >> M;
+	for (int i = 0; i < M; i++) {
 		cin >> list[i];
 	}
 	init();
