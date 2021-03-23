@@ -1,62 +1,78 @@
 #include <iostream>
 #include <queue>
-#include <stdio.h>
-#include <memory.h>
+#include <cstring>
+#define INF 1000000000
 using namespace std;
 
-int map[125][125], d[125][125], visit[125][125];
-int x_direct[] = { 0,1,0,-1 }, y_direct[] = { 1,0,-1,0 };
+typedef struct Point {
+	int x;
+	int y;
+	int dis;
+}Point;
+
+int list[125][125], d[125][125];
+bool visit[125][125];
+int direct[4][2] = { {0,1},{1,0},{0,-1},{-1,0} };
 int N;
 
-int Min(int x, int y) {
-	return x < y ? x : y;
-}
+struct compare {
+	bool operator()(Point a, Point b) {
+		return a.dis > b.dis;
+	}
+};
 
-void dijkstra(int x, int y) {
-	d[x][y] = map[x][y];
-	visit[x][y] = 1;
-
-	priority_queue < pair<int, pair<int, int> > >q;
-	q.push(make_pair(-d[x][y], make_pair(x, y)));
+void dijkstra() {
+	priority_queue<Point, vector<Point>, compare> q;
+	q.push({ 0,0,list[0][0] });
+	d[0][0] = list[0][0];
 	while (!q.empty()) {
-		int nowx = q.top().second.first;
-		int nowy = q.top().second.second;
-		int ans = -q.top().first;
+		int x = q.top().x;
+		int y = q.top().y;
+		int dis = q.top().dis;
 		q.pop();
 
-		if(d[nowx][nowy]) d[nowx][nowy] = Min(ans, d[nowx][nowy]);
-		else d[nowx][nowy] = ans;
-		visit[nowx][nowy] = 1;
+		if (d[x][y] < dis) continue;
 
 		for (int i = 0; i < 4; i++) {
-			int xx = nowx + x_direct[i];
-			int yy = nowy + y_direct[i];
+			int nx = x + direct[i][0];
+			int ny = y + direct[i][1];
 
-			if (xx < 0 || yy < 0 || xx >= N || yy >= N) continue;
-			if (visit[xx][yy]) continue;
+			if (nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
+			int nextdis = dis + list[nx][ny];
+			if (d[nx][ny] > nextdis) {
+				d[nx][ny] = nextdis;
+				q.push({ nx, ny, nextdis });
+			}
+		}
+	}
+}
 
-			int nextans = ans + map[xx][yy];
-			q.push(make_pair(-nextans, make_pair(xx, yy)));
+void input() {
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			cin >> list[i][j];
+		}
+	}
+}
+
+void init() {
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			d[i][j] = INF;
 		}
 	}
 }
 
 int main() {
-	for (int T = 1; ; T++) {
-		scanf("%d", &N);
-		if (!N) break;
+	cin.tie(NULL); cout.tie(NULL);
+	ios::sync_with_stdio(false);
 
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				scanf("%d", &map[i][j]);
-			}
-		}
-
-		dijkstra(0, 0);
-		printf("Problem %d: %d\n", T, d[N - 1][N - 1]);
-		memset(d, 0, sizeof(d));
-		memset(visit, 0, sizeof(visit));
+	for (int t = 1; ; t++) {
+		input();
+		if (!N) return 0;
+		init();
+		dijkstra();
+		cout << "Problem " << t << ": " << d[N - 1][N - 1] << '\n';
 	}
-
-	return 0;
 }
