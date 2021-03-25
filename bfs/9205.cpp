@@ -1,70 +1,77 @@
 #include <iostream>
-#include <algorithm>
-#include <cstring>
 #include <vector>
+#include <queue>
+#include <cstring>
+#include <algorithm>
 using namespace std;
 
-vector<pair<int, int> > market;
-bool visit[102];
-int N, sx, sy, mx, my, ex, ey, nowx, nowy, dis, ans;
+vector<int> graph[103];
+int list[103][2];
+bool visit[103];
+int N;
 
-int abs(int x) {
-	if (x > 0) return x;
-	else return -x;
+void bfs() {
+	queue<int> q;
+	q.push(1);
+	visit[1] = true;
+	while (!q.empty()) {
+		int x = q.front();
+		q.pop();
+
+		for (int i = 0; i < graph[x].size(); i++) {
+			int next = graph[x][i];
+
+			if (visit[next]) continue;
+
+			q.push(next);
+			visit[next] = true;
+		}
+	}
+
+	if (visit[N + 2]) cout << "happy\n";
+	else cout << "sad\n";
 }
 
-void dfs(int v) {
-	visit[v] = true;
-	int x = market[v].first;
-	int y = market[v].second;
+int getDis(int a[2], int b[2]) {
+	return abs(a[0] - b[0]) + abs(a[1] - b[1]);
+}
 
-	for (int i = 0; i < market.size(); i++) {
-		if (!visit[i] && v != i) {
-			mx = market[i].first;
-			my = market[i].second;
-			dis = abs(mx - x) + abs(my - y);
-			if (dis > 1000) continue;
-			if (dis <= 1000 && mx == ex && my == ey) {
-				ans = 1;
-				return;
+void func() {
+	for (int i = 1; i <= N + 1; i++) {
+		for (int j = i + 1; j <= N + 2; j++) {
+			int dis = getDis(list[i], list[j]);
+			if (dis <= 1000) {
+				graph[i].push_back(j);
+				graph[j].push_back(i);
 			}
-
-			dfs(i);
 		}
-		if (ans == 1) break;
+	}
+}
+
+void input() {
+	cin >> N;
+	for (int i = 1; i <= N + 2; i++) {
+		cin >> list[i][0] >> list[i][1];
+	}
+}
+
+void init() {
+	memset(visit, false, sizeof(visit));
+	for (int i = 1; i <= N + 2; i++) {
+		graph[i].clear();
 	}
 }
 
 int main() {
 	cin.tie(NULL); cout.tie(NULL);
 	ios::sync_with_stdio(false);
-	int Testcase;
-	cin >> Testcase;
-	while (Testcase--) {
-		cin >> N;
-		for (int i = 0; i < N + 2; i++) {
-			cin >> mx >> my;
-			market.push_back(make_pair(mx, my));
-		}
-		sx = market[0].first;
-		sy = market[0].second;
-		ex = market[N + 1].first;
-		ey = market[N + 1].second;
-
-		sort(market.begin(), market.end());
-		for (int i = 0; i < market.size(); i++) {
-			if (market[i].first == sx && market[i].second == sy) {
-				dfs(i);
-				break;
-			}
-		}
-
-		if (ans == 1) cout << "happy\n";
-		else cout << "sad\n";
-
-		ans = 0;
-		memset(visit, false, sizeof(visit));
-		market.clear();
+	int tc;
+	cin >> tc;
+	while (tc--) {
+		input();
+		func();
+		bfs();
+		init();
 	}
 
 	return 0;
