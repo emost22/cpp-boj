@@ -19,7 +19,7 @@ int mstParent[MAX + 1], depth[MAX + 1];
 bool visit[MAX + 1];
 int mst;
 int N, M, cnt;
-
+ 
 bool cmp(edge a, edge b) {
 	return a.w < b.w;
 }
