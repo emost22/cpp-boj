@@ -4,7 +4,7 @@ using namespace std;
 int list[100001];
 pair<int, int> tree[400001];
 int N, M;
- 
+
 void update(int node, int s, int e, int idx, pair<int, int> diff) {
 	if (idx<s || idx>e) return;
 	if (s == e) {
