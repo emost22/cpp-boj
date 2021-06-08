@@ -21,7 +21,7 @@ int func(int x, int y) {
 		if (nx > N || ny > M) continue;
 		ret = max(ret, func(nx, ny) + list[x][y]);
 	}
-
+	
 	return ret;
 }
 
