@@ -26,14 +26,15 @@ void func() {
 	list[x][y] = value++;
 
 	while (true) {
-		x += direct[idx][0];
-		y += direct[idx][1];
-		cnt++;
-
-		if (value == K) {
+		if (list[x][y] == K) {
 			ansx = x;
 			ansy = y;
 		}
+		if (x == 1 && y == 1) break;
+
+		x += direct[idx][0];
+		y += direct[idx][1];
+		cnt++;
 
 		list[x][y] = value++;
 		if (cnt == move) {
@@ -41,14 +42,13 @@ void func() {
 			idx = (idx + 1) % 4;
 			cnt = 0;
 		}
-		if (x == 1 && y == 1) break;
 	}
 }
 
 int main() {
 	cin.tie(NULL); cout.tie(NULL);
 	ios::sync_with_stdio(false);
-	
+
 	cin >> N >> K;
 	func();
 	print();
