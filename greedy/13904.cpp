@@ -17,15 +17,12 @@ void func() {
 	int ans = 0;
 	for (int i = 0; i < N; i++) {
 		int d = list[i].first;
-		while (1) {
-			if (!d) break;
-
-			if (visit[d]) d--;
-			else {
-				visit[d] = true;
-				ans += list[i].second;
-				break;
-			}
+		for (int j = d; j > 0; j--) {
+			if (visit[j]) continue;
+			
+			visit[j] = true;
+			ans += list[i].second;
+			break;
 		}
 	}
 
