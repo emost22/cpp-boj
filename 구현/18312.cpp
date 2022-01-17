@@ -2,17 +2,9 @@
 #include <algorithm>
 using namespace std;
 
-typedef struct Time {
-	int h;
-	int m;
-	int s;
-}Time;
-
 int N, K;
 
 void func() {
-	Time e = { N, 59, 59 };
-
 	int ans = 0;
 	for (int i = 0; i <= N; i++) {
 		for (int j = 0; j < 60; j++) {
