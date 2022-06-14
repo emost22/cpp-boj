@@ -16,10 +16,8 @@ int dfs(int idx, int d) {
 	if (ret != -1) return ret;
 	ret = 0;
 
-	for (int i = idx; i < N; i++) {
-		ret |= dfs(i + 1, (d + list[i]) % 7);
-		if (ret) return ret;
-	}
+	ret |= dfs(idx + 1, (d + list[idx]) % 7);
+	ret |= dfs(idx + 1, d);
 
 	return ret;
 }
