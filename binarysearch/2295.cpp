@@ -16,15 +16,28 @@ void func() {
 	}
 	sort(v.begin(), v.end());
 
+	int vsize = v.size();
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
 			int dc = list[i] - list[j];
 			if (dc <= 0) continue;
 
-			int cnt = upper_bound(v.begin(), v.end(), dc) - lower_bound(v.begin(), v.end(), dc);
-			if (cnt) {
-				cout << list[i] << '\n';
-				return;
+			int l = 0;
+			int r = vsize - 1;
+			bool flag = false;
+			while (l <= r) {
+				int m = (l + r) / 2;
+
+				if (v[m] == dc) {
+					cout << list[i] << '\n';
+					return;
+				}
+				else if (v[m] > dc) {
+					r = m - 1;
+				}
+				else {
+					l = m + 1;
+				}
 			}
 		}
 	}
