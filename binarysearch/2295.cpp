@@ -29,8 +29,8 @@ void func() {
 				int m = (l + r) / 2;
 
 				if (v[m] == dc) {
-					flag = true;
-					break;
+					cout << list[i] << '\n';
+					return;
 				}
 				else if (v[m] > dc) {
 					r = m - 1;
@@ -38,11 +38,6 @@ void func() {
 				else {
 					l = m + 1;
 				}
-			}
-
-			if (flag) {
-				cout << list[i] << '\n';
-				return;
 			}
 		}
 	}
