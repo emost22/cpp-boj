@@ -11,6 +11,7 @@ typedef pair<int, ll> pil;
 typedef struct Point {
 	int x, y;
 	ll w;
+	int idx;
 }Point;
 
 typedef struct Node {
@@ -20,7 +21,6 @@ typedef struct Node {
 Point list[MAX];
 Node tree[MAX * 4];
 vector<pil> yList[MAX];
-pii xtmp[MAX], ytmp[MAX];
 int N;
 
 void update(int node, int s, int e, int idx, ll diff) {
@@ -50,23 +50,28 @@ Node query(int node, int s, int e, int l, int r) {
 }
 
 void func() {
-	sort(xtmp + 1, xtmp + 1 + N);
-	sort(ytmp + 1, ytmp + 1 + N);
+	sort(list + 1, list + 1 + N, [](Point a, Point b) {
+		return a.x < b.x;
+	});
 
 	int pre = 1e9 + 1;
 	int xCnt = 0;
 	for (int i = 1; i <= N; i++) {
-		if (pre != xtmp[i].first) xCnt++;
-		pre = xtmp[i].first;
-		list[xtmp[i].second].x = xCnt;
+		if (pre != list[i].x) xCnt++;
+		pre = list[i].x;
+		list[i].x = xCnt;
 	}
+
+	sort(list + 1, list + 1 + N, [](Point a, Point b) {
+		return a.y < b.y;
+	});
 
 	pre = 1e9 + 1;
 	int yCnt = 0;
 	for (int i = 1; i <= N; i++) {
-		if (pre != ytmp[i].first) yCnt++;
-		pre = ytmp[i].first;
-		list[ytmp[i].second].y = yCnt;
+		if (pre != list[i].y) yCnt++;
+		pre = list[i].y;
+		list[i].y = yCnt;
 	}
 
 	for (int i = 1; i <= N; i++) {
@@ -91,8 +96,7 @@ void input() {
 	cin >> N;
 	for (int i = 1; i <= N; i++) {
 		cin >> list[i].x >> list[i].y >> list[i].w;
-		xtmp[i] = { list[i].x, i };
-		ytmp[i] = { list[i].y, i };
+		list[i].idx = i;
 	}
 }
 
