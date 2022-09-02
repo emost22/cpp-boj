@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#define MAX 100001
+using namespace std;
+
+vector<int> list[MAX];
+int tree[MAX * 4], lazy[MAX * 4], leftIdx[MAX], rightIdx[MAX];
+int N, M, cnt;
+
+void dfs(int v) {
+	leftIdx[v] = ++cnt;
+	for (auto next : list[v]) {
+		dfs(next);
+	}
+	rightIdx[v] = cnt;
+}
+
+int init(int node, int s, int e) {
+	lazy[node] = -1;
+	if (s == e) {
+		return tree[node] = 1;
+	}
+
+	int m = (s + e) / 2;
+	return tree[node] = init(node * 2, s, m) + init(node * 2 + 1, m + 1, e);
+}
+
+void lazyUpdate(int node, int s, int e) {
+	if (lazy[node] == -1) return;
+
+	tree[node] = lazy[node] * (e - s + 1);
+	if (s != e) {
+		lazy[node * 2] = lazy[node];
+		lazy[node * 2 + 1] = lazy[node];
+	}
+	lazy[node] = -1;
+}
+
+void update(int node, int s, int e, int l, int r, int diff) {
+	lazyUpdate(node, s, e);
+	if (s > r || l > e) return;
+	if (l <= s && e <= r) {
+		lazy[node] = diff;
+		lazyUpdate(node, s, e);
+		return;
+	}
+
+	int m = (s + e) / 2;
+	update(node * 2, s, m, l, r, diff);
+	update(node * 2 + 1, m + 1, e, l, r, diff);
+	tree[node] = tree[node * 2] + tree[node * 2 + 1];
+}
+
+int query(int node, int s, int e, int l, int r) {
+	lazyUpdate(node, s, e);
+	if (s > r || l > e) return 0;
+	if (l <= s && e <= r) return tree[node];
+
+	int m = (s + e) / 2;
+	return query(node * 2, s, m, l, r) + query(node * 2 + 1, m + 1, e, l, r);
+}
+
+void func() {
+	dfs(1);
+
+	int type, x;
+	cin >> M;
+	while (M--) {
+		cin >> type >> x;
+		if (type == 1) {
+			update(1, 1, N, leftIdx[x] + 1, rightIdx[x], 1);
+		}
+		else if (type == 2) {
+			update(1, 1, N, leftIdx[x] + 1, rightIdx[x], 0);
+		}
+		else {
+			cout << query(1, 1, N, leftIdx[x] + 1, rightIdx[x]) << '\n';
+		}
+	}
+}
+
+void input() {
+	int x;
+	cin >> N;
+	for (int i = 1; i <= N; i++) {
+		cin >> x;
+		if (!x) continue;
+		list[x].push_back(i);
+	}
+
+	init(1, 1, N);
+}
+
+int main() {
+	cin.tie(NULL); cout.tie(NULL);
+	ios::sync_with_stdio(false);
+
+	input();
+	func();
+
+	return 0;
+}
