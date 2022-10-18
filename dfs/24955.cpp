@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
-#include <string>
 #define MAX 1001
 #define MOD 1000000007
 using namespace std;
