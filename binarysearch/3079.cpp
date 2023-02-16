@@ -17,6 +17,7 @@ void func() {
 
 		ll sum = 0;
 		for (int i = 0; i < N; i++) {
+			if (sum > M) break;
 			sum += (m / list[i]);
 		}
 
