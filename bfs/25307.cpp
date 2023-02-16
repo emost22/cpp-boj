@@ -14,6 +14,7 @@ int direct[4][2] = { {0,1},{1,0},{0,-1},{-1,0} };
 int N, M, K;
 
 void func() {
+	visit[q.front().first][q.front().second] = true;
 	for (int t = 0; !q.empty(); t++) {
 		int qsize = q.size();
 		while (qsize--) {
@@ -70,7 +71,6 @@ void input() {
 			cin >> list[i][j];
 			if (list[i][j] == 4) {
 				q.push({ i,j });
-				visit[i][j] = true;
 			}
 			else if (list[i][j] == 3) {
 				mq.push({ i,j });
