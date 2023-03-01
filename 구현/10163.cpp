@@ -1,27 +1,34 @@
 #include <iostream>
+#define MAX_N 101
+#define MAX_M 1001
 using namespace std;
 
-int list[101][101], num[101];
+int list[MAX_M][MAX_M];
+int ret[MAX_N];
 int N;
 
-void print() {
+void func() {
+	for (int i = 0; i < MAX_M; i++) {
+		for (int j = 0; j < MAX_M; j++) {
+			if (!list[i][j]) continue;
+
+			ret[list[i][j]]++;
+		}
+	}
+
 	for (int i = 1; i <= N; i++) {
-		cout << num[i] << '\n';
+		cout << ret[i] << '\n';
 	}
 }
 
 void input() {
-	int sx, sy, width, height;
+	int sx, sy, w, h;
 	cin >> N;
 	for (int i = 1; i <= N; i++) {
-		cin >> sx >> sy >> width >> height;
-		for (int x = sx; x < sx + width; x++) {
-			for (int y = sy; y < sy + height; y++) {
-				if (list[x][y]) {
-					num[list[x][y]]--;
-				}
+		cin >> sx >> sy >> w >> h;
+		for (int x = sx; x < sx + w; x++) {
+			for (int y = sy; y < sy + h; y++) {
 				list[x][y] = i;
-				num[list[x][y]]++;
 			}
 		}
 	}
@@ -32,7 +39,7 @@ int main() {
 	ios::sync_with_stdio(false);
 
 	input();
-	print();
+	func();
 
 	return 0;
 }
