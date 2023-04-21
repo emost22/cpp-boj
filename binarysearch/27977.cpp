@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #define MAX_N 100001
-#define MAX_L 200000
 using namespace std;
 
 int list[MAX_N];
@@ -9,7 +8,7 @@ int L, N, K, maxDis;
 
 void func() {
 	int l = maxDis;
-	int r = MAX_L;
+	int r = L;
 
 	int ret = 0;
 	while (l <= r) {
