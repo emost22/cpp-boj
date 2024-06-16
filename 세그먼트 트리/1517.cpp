@@ -12,7 +12,7 @@ int N;
 void compress() {
 	sort(list, list + N);
 	int pre = 1e9 + 1;
-	int cnt = -1;
+	int cnt = 0;
 	for (int i = 0; i < N; i++) {
 		if (pre != list[i].first) cnt++;
 		pre = list[i].first;
