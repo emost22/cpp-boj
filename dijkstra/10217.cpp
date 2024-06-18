@@ -9,7 +9,11 @@ typedef struct Point {
 	int v;
 	int cost;
 	int t;
-};
+}Point;
+
+bool cmp(Point a, Point b) {
+	return a.t < b.t;
+}
 
 vector<Point> graph[101];
 int d[101][10001];
@@ -49,6 +53,14 @@ void dijkstra() {
 	else cout << d[N][M] << '\n';
 }
 
+void func() {
+	for (int i = 1; i <= N; i++) {
+		sort(graph[i].begin(), graph[i].end(), cmp);
+	}
+
+	dijkstra();
+}
+
 void init() {
 	for (int i = 1; i <= N; i++) {
 		graph[i].clear();
@@ -76,7 +88,7 @@ int main() {
 	cin >> tc;
 	while (tc--) {
 		input();
-		dijkstra();
+		func();
 	}
 
 	return 0;
