@@ -6,30 +6,25 @@ typedef long long ll;
 typedef pair<int, ll> pi;
 
 pi list[MAX];
-ll leftSum, rightSum;
+ll sum;
 int N;
 
 void func() {
-	int ans = 0;
-	ll diff = rightSum;
+	ll now = 0;
 	for (int i = 0; i < N; i++) {
-		rightSum -= list[i].second;
-
-		if (diff > abs(rightSum - leftSum)) {
-			diff = abs(rightSum - leftSum);
-			ans = list[i].first;
+		now += list[i].second;
+		if (now >= (sum + 1) >> 1) {
+			cout << list[i].first;
+			return;
 		}
-		leftSum += list[i].second;
 	}
-
-	cout << ans << '\n';
 }
 
 void input() {
 	cin >> N;
 	for (int i = 0; i < N; i++) {
 		cin >> list[i].first >> list[i].second;
-		rightSum += list[i].second;
+		sum += list[i].second;
 	}
 	sort(list, list + N);
 }
